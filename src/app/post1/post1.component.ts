@@ -6,21 +6,33 @@ import { Http } from '@angular/http';
   templateUrl: './post1.component.html',:
   styleUrls: ['./post1.component.css']
 })
-export class Post1Component  {
+export class Post1Component {
 
   private _posts: any[];
+  private _url = "https://jsonplaceholder.typicode.com/posts";
 
-  constructor(http: Http) {
-    http.get("https://jsonplaceholder.typicode.com/posts")
-    .subscribe( response =>{
+  constructor(private http: Http) {
+    this.http.get(this._url)
+      .subscribe(response => {
         this._posts = response.json();
-    });
+      });
 
-   }
+  }
 
-   get posts(){
-     return this._posts;
-   }
+  updatePost(post) {
+    this.http.patch(this._url + "/" + post.id, JSON.stringify({ isRed: true }))
+      .subscribe(response => {
+        console.log(response);
+      });
+  }
 
- 
+  get posts() {
+    return this._posts;
+  }
+
+  get url() {
+    return this._url;
+  }
+
+
 }
