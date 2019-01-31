@@ -26,6 +26,15 @@ export class Post1Component {
       });
   }
 
+  deletePost(post){
+    this.http.delete(this._url + "/" + post.id)
+    .subscribe(response =>{
+      let deletingIndex = this.posts.indexOf(post);
+      this.posts.splice(deletingIndex,1);
+
+    });
+  }
+
   get posts() {
     return this._posts;
   }
