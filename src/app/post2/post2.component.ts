@@ -2,37 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 
 @Component({
-  selector: 'app-post1',
-  templateUrl: './post1.component.html',
-  styleUrls: ['./post1.component.css']
+  selector: 'app-post2',
+  templateUrl: './post2.component.html',
+  styleUrls: ['./post2.component.css']
 })
-export class Post1Component implements OnInit {
+export class Post2Component implements OnInit {
+
 
   private _posts: any[];
   private _url = "https://jsonplaceholder.typicode.com/posts";
 
   constructor(private http: Http) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.http.get(this._url)
-      .subscribe(response => {
-        this._posts = response.json();
-      });
-  }
-
-  createPost(input: HTMLInputElement) {
-
-    let post = {
-      title: input.value
-    };
-    input.value = "";
-    
-    this.http.post(this._url, JSON.stringify(post))
-      .subscribe(response => {
-        post['id'] = response.json().id;
-        this._posts.unshift(post);
-       
-      });
+    .subscribe(response => {
+      this._posts = response.json();
+    });
   }
 
   updatePost(post) {
@@ -58,6 +44,5 @@ export class Post1Component implements OnInit {
   get url() {
     return this._url;
   }
-
 
 }
