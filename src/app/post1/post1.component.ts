@@ -1,22 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 
 @Component({
   selector: 'app-post1',
-  templateUrl: './post1.component.html',:
+  templateUrl: './post1.component.html',
   styleUrls: ['./post1.component.css']
 })
-export class Post1Component {
+export class Post1Component implements OnInit {
 
   private _posts: any[];
   private _url = "https://jsonplaceholder.typicode.com/posts";
 
-  constructor(private http: Http) {
+  constructor(private http: Http) { }
+
+  ngOnInit(): void {
     this.http.get(this._url)
       .subscribe(response => {
         this._posts = response.json();
       });
-
   }
 
   updatePost(post) {
@@ -26,13 +27,13 @@ export class Post1Component {
       });
   }
 
-  deletePost(post){
+  deletePost(post) {
     this.http.delete(this._url + "/" + post.id)
-    .subscribe(response =>{
-      let deletingIndex = this.posts.indexOf(post);
-      this.posts.splice(deletingIndex,1);
+      .subscribe(response => {
+        let deletingIndex = this.posts.indexOf(post);
+        this.posts.splice(deletingIndex, 1);
 
-    });
+      });
   }
 
   get posts() {
