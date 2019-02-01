@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Http } from '@angular/http';
+import { Post2Service } from '../services/post2.service';
 
 @Component({
   selector: 'app-post2',
@@ -10,26 +10,41 @@ export class Post2Component implements OnInit {
 
 
   private _posts: any[];
-  private _url = "https://jsonplaceholder.typicode.com/posts";
 
-  constructor(private http: Http) { }
+  constructor(private service: Post2Service) { }
 
   ngOnInit() {
-    this.http.get(this._url)
-    .subscribe(response => {
-      this._posts = response.json();
-    });
+    this.service.getPost()
+      .subscribe(response => {
+        this._posts = response.json();
+      });
+  }
+
+
+  createPost(input: HTMLInputElement) {
+
+    let post = {
+      title: input.value
+    };
+    input.value = "";
+
+    this.service.createPost(JSON.stringify(post))
+      .subscribe(response => {
+        post['id'] = response.json().id;
+        this._posts.unshift(post);
+
+      });
   }
 
   updatePost(post) {
-    this.http.patch(this._url + "/" + post.id, JSON.stringify({ isRed: true }))
+    this.service.updatePost(post.id)
       .subscribe(response => {
         console.log(response);
       });
   }
 
   deletePost(post) {
-    this.http.delete(this._url + "/" + post.id)
+    this.service.deletePost(post.id)
       .subscribe(response => {
         let deletingIndex = this.posts.indexOf(post);
         this.posts.splice(deletingIndex, 1);
@@ -41,8 +56,6 @@ export class Post2Component implements OnInit {
     return this._posts;
   }
 
-  get url() {
-    return this._url;
-  }
+
 
 }
