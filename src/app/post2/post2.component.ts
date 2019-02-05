@@ -19,7 +19,7 @@ export class Post2Component implements OnInit {
         response => {
           this._posts = response.json();
         },
-        error => {
+        (error: Response) => {
           alert("An unexperted error occured!");
           console.log(error);
         });
@@ -41,8 +41,14 @@ export class Post2Component implements OnInit {
 
         },
         error => {
-          alert("An unexperted error occured!");
-          console.log(error);
+
+          if (error.status === 400) {
+            alert("Bad request");
+            // this.form.setError(error.json())
+          } else {
+            alert("An unexperted error occured!");
+            console.log(error);
+          }
         });
   }
 
@@ -67,6 +73,9 @@ export class Post2Component implements OnInit {
 
         },
         error => {
+          if (error.status === 404)
+            alert("This post is already been deleted!");
+
           alert("An unexperted error occured!");
           console.log(error);
         });
