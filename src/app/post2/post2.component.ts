@@ -15,9 +15,14 @@ export class Post2Component implements OnInit {
 
   ngOnInit() {
     this.service.getPost()
-      .subscribe(response => {
-        this._posts = response.json();
-      });
+      .subscribe(
+        response => {
+          this._posts = response.json();
+        },
+        error => {
+          alert("An unexperted error occured!");
+          console.log(error);
+        });
   }
 
 
@@ -29,27 +34,42 @@ export class Post2Component implements OnInit {
     input.value = "";
 
     this.service.createPost(JSON.stringify(post))
-      .subscribe(response => {
-        post['id'] = response.json().id;
-        this._posts.unshift(post);
+      .subscribe(
+        response => {
+          post['id'] = response.json().id;
+          this._posts.unshift(post);
 
-      });
+        },
+        error => {
+          alert("An unexperted error occured!");
+          console.log(error);
+        });
   }
 
   updatePost(post) {
     this.service.updatePost(post.id)
-      .subscribe(response => {
-        console.log(response);
-      });
+      .subscribe(
+        response => {
+          console.log(response);
+        },
+        error => {
+          alert("An unexperted error occured!");
+          console.log(error);
+        });
   }
 
   deletePost(post) {
     this.service.deletePost(post.id)
-      .subscribe(response => {
-        let deletingIndex = this.posts.indexOf(post);
-        this.posts.splice(deletingIndex, 1);
+      .subscribe(
+        response => {
+          let deletingIndex = this.posts.indexOf(post);
+          this.posts.splice(deletingIndex, 1);
 
-      });
+        },
+        error => {
+          alert("An unexperted error occured!");
+          console.log(error);
+        });
   }
 
   get posts() {
