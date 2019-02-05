@@ -1,3 +1,4 @@
+import { BadInput } from './../common/bad-input';
 import { NotFoundError } from './../common/not-found-error';
 import { AppError } from './../common/app-error';
 import { Component, OnInit } from '@angular/core';
@@ -42,9 +43,9 @@ export class Post2Component implements OnInit {
           this._posts.unshift(post);
 
         },
-        (error: Response) => {
+        (error: AppError) => {
 
-          if (error.status === 400) {
+          if (error instanceof BadInput) {
             alert("Bad request");
             // this.form.setError(error.json())
           } else {
