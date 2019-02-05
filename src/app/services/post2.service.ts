@@ -22,13 +22,15 @@ export class Post2Service {
 
   createPost(post) {
     return this.http.post(this._url, JSON.stringify(post))
-      .catchError((error: Response) => {
-        if (error.status === 400)
-          return Observable.throw(new BadInput(error));
+      .pipe(
+        catchError((error: Response) => {
+          if (error.status === 400)
+            return Observable.throw(new BadInput(error));
 
-        return Observable.throw(new AppError(error));
+          return Observable.throw(new AppError(error));
 
-      })
+        }));
+
   }
 
   updatePost(id) {
@@ -37,12 +39,15 @@ export class Post2Service {
 
   deletePost(id) {
     return this.http.delete(this._url + "/" + id)
-      .catchError((error: Response) => {
+      .pipe(
+        catchError((error: Response) => {
 
-        if (error.status === 404)
-          return Observable.throw(new NotFoundError());
+          if (error.status === 404)
+            return Observable.throw(new NotFoundError());
 
-        return Observable.throw(new AppError(error));
-      })
+          return Observable.throw(new AppError(error));
+        })
+      );
+
   }
 }
