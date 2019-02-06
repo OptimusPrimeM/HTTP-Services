@@ -23,31 +23,34 @@ export class Post2Service {
   createPost(post) {
     return this.http.post(this._url, JSON.stringify(post))
       .pipe(
-        catchError((error: Response) => {
-          if (error.status === 400)
-            return Observable.throw(new BadInput(error));
-
-          return Observable.throw(new AppError(error));
-
-        }));
+        catchError(this.handleError)
+      );
 
   }
 
   updatePost(id) {
-    return this.http.patch(this._url + "/" + id, JSON.stringify({ isRed: true }));
+    return this.http.patch(this._url + "/" + id, JSON.stringify({ isRed: true }))
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   deletePost(id) {
     return this.http.delete(this._url + "/" + id)
       .pipe(
-        catchError((error: Response) => {
-
-          if (error.status === 404)
-            return Observable.throw(new NotFoundError());
-
-          return Observable.throw(new AppError(error));
-        })
+        catchError(this.handleError)
       );
 
+  }
+
+  handleError = (error: Response) => {
+
+    if (error.status === 400)
+      return Observable.throw(new BadInput(error));
+
+    if (error.status === 404)
+      return Observable.throw(new NotFoundError());
+
+    return Observable.throw(new AppError(error));
   }
 }

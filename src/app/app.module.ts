@@ -1,3 +1,5 @@
+import { ErrorHandler } from '@angular/core';
+import { AppErrorHandler } from './common/app-error-handler';
 import { Post2Service } from './services/post2.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -16,7 +18,13 @@ import { Post2Component } from './post2/post2.component';
     BrowserModule,
     HttpModule
   ],
-  providers: [ Post2Service ],
+  providers: [ 
+    Post2Service,
+    {
+      provide :ErrorHandler,
+      useClass: AppErrorHandler
+    }
+   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

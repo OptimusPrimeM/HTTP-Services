@@ -21,10 +21,6 @@ export class Post2Component implements OnInit {
       .subscribe(
         response => {
           this._posts = response.json();
-        },
-        (error: Response) => {
-          alert("An unexperted error occured!");
-          console.log(error);
         });
   }
 
@@ -47,11 +43,9 @@ export class Post2Component implements OnInit {
 
           if (error instanceof BadInput) {
             alert("Bad request");
-            // this.form.setError(error.json())
-          } else {
-            alert("An unexperted error occured!");
-            console.log(error);
+            // this.form.setError(error.originalError)
           }
+          else throw error;
         });
   }
 
@@ -60,10 +54,6 @@ export class Post2Component implements OnInit {
       .subscribe(
         response => {
           console.log(response);
-        },
-        (error: Response) => {
-          alert("An unexperted error occured!");
-          console.log(error);
         });
   }
 
@@ -78,9 +68,7 @@ export class Post2Component implements OnInit {
         (error: AppError) => {
           if (error instanceof NotFoundError)
             alert("This post is already been deleted!");
-
-          alert("An unexperted error occured!");
-          console.log(error);
+          else throw error;
         });
   }
 
