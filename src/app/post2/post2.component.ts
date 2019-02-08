@@ -17,7 +17,7 @@ export class Post2Component implements OnInit {
   constructor(private service: Post2Service) { }
 
   ngOnInit() {
-    this.service.getPost()
+    this.service.getAll()
       .subscribe(
         response => {
           this._posts = response.json();
@@ -32,14 +32,14 @@ export class Post2Component implements OnInit {
     };
     input.value = "";
 
-    this.service.createPost(JSON.stringify(post))
+    this.service.create(JSON.stringify(post))
       .subscribe(
         response => {
           post['id'] = response.json().id;
           this._posts.unshift(post);
 
         },
-        (error: AppError) => {
+        (error: AppError)  => {
 
           if (error instanceof BadInput) {
             alert("Bad request");
@@ -50,7 +50,7 @@ export class Post2Component implements OnInit {
   }
 
   updatePost(post) {
-    this.service.updatePost(post.id)
+    this.service.update(post.id)
       .subscribe(
         response => {
           console.log(response);
@@ -58,7 +58,7 @@ export class Post2Component implements OnInit {
   }
 
   deletePost(post) {
-    this.service.deletePost(post.id)
+    this.service.delete(post.id)
       .subscribe(
         response => {
           let deletingIndex = this.posts.indexOf(post);
