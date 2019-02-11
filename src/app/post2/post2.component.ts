@@ -27,16 +27,17 @@ export class Post2Component implements OnInit {
     let post = {
       title: input.value
     };
+    this._posts.unshift(post);
+
     input.value = "";
 
-    this.service.create(JSON.stringify(post))
+    this.service.create(post)
       .subscribe(
         newPost => {
           post['id'] = newPost.id;
-          this._posts.unshift(post);
-
         },
         (error: AppError) => {
+          this._posts.shift();
 
           if (error instanceof BadInput) {
             alert("Bad request");
@@ -55,14 +56,15 @@ export class Post2Component implements OnInit {
   }
 
   deletePost(post) {
+    let deletingIndex = this.posts.indexOf(post);
+    this.posts.splice(deletingIndex, 1);
+
     this.service.delete(post.id)
       .subscribe(
-        () => {
-          let deletingIndex = this.posts.indexOf(post);
-          this.posts.splice(deletingIndex, 1);
-
-        },
+        null,
         (error: AppError) => {
+          this.posts.splice(deletingIndex, 0, post);
+
           if (error instanceof NotFoundError)
             alert("This post is already been deleted!");
           else throw error;
