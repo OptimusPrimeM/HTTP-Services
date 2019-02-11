@@ -18,10 +18,7 @@ export class Post2Component implements OnInit {
 
   ngOnInit() {
     this.service.getAll()
-      .subscribe(
-        response => {
-          this._posts = response.json();
-        });
+      .subscribe(posts => this._posts = posts);
   }
 
 
@@ -34,12 +31,12 @@ export class Post2Component implements OnInit {
 
     this.service.create(JSON.stringify(post))
       .subscribe(
-        response => {
-          post['id'] = response.json().id;
+        newPost => {
+          post['id'] = newPost.id;
           this._posts.unshift(post);
 
         },
-        (error: AppError)  => {
+        (error: AppError) => {
 
           if (error instanceof BadInput) {
             alert("Bad request");
@@ -52,15 +49,15 @@ export class Post2Component implements OnInit {
   updatePost(post) {
     this.service.update(post.id)
       .subscribe(
-        response => {
-          console.log(response);
+        updatePost => {
+          console.log(updatePost);
         });
   }
 
   deletePost(post) {
     this.service.delete(post.id)
       .subscribe(
-        response => {
+        () => {
           let deletingIndex = this.posts.indexOf(post);
           this.posts.splice(deletingIndex, 1);
 

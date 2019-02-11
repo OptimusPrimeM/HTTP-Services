@@ -2,7 +2,7 @@ import { BadInput } from './../common/bad-input';
 import { AppError } from './../common/app-error';
 import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { NotFoundError } from '../common/not-found-error';
 
@@ -12,16 +12,21 @@ import { NotFoundError } from '../common/not-found-error';
 export class DataService {
 
 
-    constructor(private http: Http, private _url:string) { }
+    constructor(private http: Http, private _url: string) { }
 
 
     getAll() {
-        return this.http.get(this._url);
+        return this.http.get(this._url)
+            .pipe(
+                map(response => response.json()),
+                catchError(this.handleError)
+            );
     }
 
     create(resource) {
         return this.http.post(this._url, JSON.stringify(resource))
             .pipe(
+                map(response => response.json()),
                 catchError(this.handleError)
             );
     }
@@ -29,6 +34,7 @@ export class DataService {
     update(id) {
         return this.http.patch(this._url + "/" + id, JSON.stringify({ isRed: true }))
             .pipe(
+                map(response => response.json()),
                 catchError(this.handleError)
             );
     }
@@ -36,6 +42,7 @@ export class DataService {
     delete(id) {
         return this.http.delete(this._url + "/" + id)
             .pipe(
+                map(response => response.json()),
                 catchError(this.handleError)
             );
 
