@@ -55,6 +55,7 @@ export class Post2Component implements OnInit {
         });
   }
 
+  /*
   deletePost(post) {
     let deletingIndex = this.posts.indexOf(post);
     this.posts.splice(deletingIndex, 1);
@@ -70,6 +71,12 @@ export class Post2Component implements OnInit {
           else throw error;
         });
   }
+  */ 
+
+ deletePost(post) {
+  this.service.delete(post.id)
+  .subscribe()
+ }
 
   get posts() {
     return this._posts;
